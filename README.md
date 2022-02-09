@@ -1,2 +1,2 @@
-# myAssignment
-This is the repository for my assignments are available.
+# Wordle Game
+This is the repository for Woordle Game.
