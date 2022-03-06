@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import simpledialog
 from tkinter import messagebox
 import logging
+import re
+import csv
 from datetime import datetime
 
 logging.basicConfig(filename='GamePlay.log', filemode='a', format='%(name)s - %(levelname)s - %(message)s')
@@ -61,6 +63,65 @@ def word_fetch():
         print("File not accessible")
     a.close()
 
+def statisticsOfLetter():
+    count=0
+    freq={}
+    rank={}
+    try:
+        #here we fetch each word and calculating its statistics
+        a = open("demo.txt", "r")
+        for x in a:
+            count+=1
+            for item in x:
+                res=[i.start() for i in re.finditer(item,x)]
+                if item in freq:
+                    citem=freq[item]
+                    for j in res:
+                        if j==0:
+                            citem[0]+=1
+                        elif j==1:
+                            citem[1]+=1
+                        elif j==2:
+                            citem[2]+=1
+                        elif j==3:
+                            citem[3]+=1
+                        elif j==4:
+                            citem[4]+=1
+                        freq[item]=citem
+                else:
+                    freq[item]=[0,0,0,0,0]
+    except IOError:
+        print("File not accessible")
+    a.close()
+    for key,value in freq.items():
+        oitem=[]
+        ritem=value
+        for item in ritem:
+            oitem.append(item/count)
+        rank[key]=oitem
+    sorted_list = sorted(freq.items(), key=lambda x:x[1])
+    print(sorted_list)
+    filename = "letterFrequency.csv"
+    with open(filename, 'w') as csv_file:  
+        writer = csv.writer(csv_file)
+        for key, value in freq.items():
+            writer.writerow([key, value])
+
+    wordRank="wordRank.csv"
+    with open(wordRank, 'w') as csv_file:  
+        writer = csv.writer(csv_file)
+        for key, value in rank.items():
+            writer.writerow([key, value])
+    listOfTuples(freq)
+
+#function for list of dictionary into tuple of dictionary
+def listOfTuples(freq):
+    tupleDict={}
+    for key, value in freq.items():
+        tuple(value)
+        tupleDict[key]=tuple(value)
+    print(tupleDict)
+
 def processGuess(theAnswer, theGuess):
     position=0
     clue=""
@@ -102,6 +163,7 @@ def removeWord(answer):
     wordList.close()
 
 def logicCode():
+    statisticsOfLetter()
     p=os.path.getsize("demo.txt")
     if(p==0):
         word_fetch()
