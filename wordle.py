@@ -15,39 +15,14 @@ todayDate=datetime.today().strftime("%m/%d/%Y, %H:%M:%S")
 logger.info('Your Gameplay for '+todayDate)
 
 staticals_list=[]
-def main():
-    guessed_correctly,num_of_guesses=logicCode()
-    #Display end of game message
-    if guessed_correctly:
-        print("Congratulations You have guesses Correct Word:-",guessed_correctly)
-    else:
-        print("You have used guesses:-", num_of_guesses)
-        print("Game Over Better luck Next Time...")
-    total_game_played=1
-    while True:        
-        ROOT = tk.Tk()
-        ROOT.withdraw()
-    
-        playAgain=messagebox.askquestion("Confirm","Do You Want To Play Again?")  
-        messagebox_info=["No of Game Played: "+str(total_game_played),"Your Staticals of Game","1st Attempt: "+str(staticals_list[0]),"2nd Attempt: "+str(staticals_list[1]),"3rd Attempt: "+str(staticals_list[2]),"4th Attempt: "+str(staticals_list[3]),"5th Attempt: "+str(staticals_list[4]),"6th Attempt: "+str(staticals_list[5])]
-        staticals_list.pop(0)
-        staticals_list.pop(0)
-        staticals_list.pop(0)
-        staticals_list.pop(0)
-        staticals_list.pop(0)
-        staticals_list.pop(0)
-        logger.info(messagebox_info)
-        if playAgain == 'yes':
-            total_game_played+=1
-            messagebox.showinfo("Game Staticals","\n".join(messagebox_info))
-            logicCode()
-        elif playAgain =='no':
-            print("Goodbye")
-            ROOT = tk.Tk()
-            ROOT.withdraw()      
-            messagebox.showinfo("Game Staticals","\n".join(messagebox_info))  
-            break
+class WordleGame():
+    def __init__(self):
+        guessed_correctly,num_of_guesses=self.logicCode()
+        #Display end of game message
+        if guessed_correctly:
+            print("Congratulations You have guesses Correct Word:-",guessed_correctly)
         else:
+<<<<<<< Updated upstream
             print("Goodbye")
 
 def word_fetch():
@@ -72,35 +47,117 @@ def processGuess(theAnswer, theGuess):
         elif letter in theAnswer:
             clue += "Y" #Y represents True Letter on Different position
             distribution+=10
-        else:
-            clue += "_" #_ represents False Letter 
-        position += 1
-    print(clue)
-    staticals_list.append(distribution)
-    print(staticals_list)
-    logger.info('Your clue:-'+ clue)
-    logger.info('Answer:-'+ theAnswer)
-    logger.info('Your Guess:-'+ theGuess)
-    logger.info('Your guessing percentage:-'+str(distribution))
-    return clue == "GGGGG" #True if correct,False otherwie
-
-def verifyGuess(theGuess):
-    if(len(theGuess) > 5 ):
-        return theGuess[:5].strip()
-    else:
-        return theGuess
-
-def removeWord(answer):
-    #Code for removing word which is already selected To avoid repeated word in Gameplay.
-    wordList=open("demo.txt", "r+")
-    lines = wordList.readlines()
-    wordList.truncate(0)
-    for line in lines:
-        if line.strip() != answer:
-            wordList.write(line)
+=======
+            print("You have used guesses:-", num_of_guesses)
+            print("Game Over Better luck Next Time...")
+        total_game_played=1
+        while True:        
+            ROOT = tk.Tk()
+            ROOT.withdraw()
         
-    wordList.close()
+            playAgain=messagebox.askquestion("Confirm","Do You Want To Play Again?")  
+            messagebox_info=["No of Game Played: "+str(total_game_played),"Your Staticals of Game","1st Attempt: "+str(staticals_list[0]),"2nd Attempt: "+str(staticals_list[1]),"3rd Attempt: "+str(staticals_list[2]),"4th Attempt: "+str(staticals_list[3]),"5th Attempt: "+str(staticals_list[4]),"6th Attempt: "+str(staticals_list[5])]
+            staticals_list.pop(0)
+            staticals_list.pop(0)
+            staticals_list.pop(0)
+            staticals_list.pop(0)
+            staticals_list.pop(0)
+            staticals_list.pop(0)
+            logger.info(messagebox_info)
+            if playAgain == 'yes':
+                total_game_played+=1
+                messagebox.showinfo("Game Staticals","\n".join(messagebox_info))
+                self.logicCode()
+            elif playAgain =='no':
+                print("Goodbye")
+                ROOT = tk.Tk()
+                ROOT.withdraw()      
+                messagebox.showinfo("Game Staticals","\n".join(messagebox_info))  
+                break
+            else:
+                print("Goodbye")
 
+    def word_fetch(self):
+        try:
+            a = open("demo.txt", "w")
+            f = open("words.txt", "r")
+            for x in f:
+                if(len(x)==6):
+                    a.write(x)
+        except IOError:
+            print("File not accessible")
+        a.close()
+        f.close()
+
+    def processGuess(self,theAnswer, theGuess):
+        position=0
+        clue=""
+        distribution=0
+        for letter in theGuess:
+            if letter == theAnswer[position]:
+                clue += "G" #G represents True Letter on Complete position
+                distribution+=20
+            elif letter in theAnswer:
+                clue += "Y" #Y represents True Letter on Different position
+                distribution+=10
+            else:
+                clue += "_" #_ represents False Letter 
+            position += 1
+        print(clue)
+        staticals_list.append(distribution)
+        print(staticals_list)
+        logger.info('Your clue:-'+ clue)
+        logger.info('Answer:-'+ theAnswer)
+        logger.info('Your Guess:-'+ theGuess)
+        logger.info('Your guessing percentage:-'+str(distribution))
+        return clue == "GGGGG" #True if correct,False otherwie
+
+    def verifyGuess(self,theGuess):
+        if(len(theGuess) > 5 ):
+            return theGuess[:5].strip()
+>>>>>>> Stashed changes
+        else:
+            return theGuess
+
+    def removeWord(self,answer):
+        #Code for removing word which is already selected To avoid repeated word in Gameplay.
+        wordList=open("demo.txt", "r+")
+        lines = wordList.readlines()
+        wordList.truncate(0)
+        for line in lines:
+            if line.strip() != answer:
+                wordList.write(line)
+            
+        wordList.close()
+
+    def logicCode(self):
+        p=os.path.getsize("demo.txt")
+        if(p==0):
+            self.word_fetch()
+            
+        wordList=open("demo.txt", "r+")
+        words = wordList.read().splitlines()
+        answer=random.choice(words)
+        self.removeWord(answer)
+        num_of_guesses=0
+        guesses_correctly = False
+        wordList.close()
+        print("G=Letter is True, Y=True Letter In wrong Spot and _= Wrong Letter")
+        while num_of_guesses < 6 and not guesses_correctly:
+            #get input from user
+            ROOT = tk.Tk()
+            ROOT.withdraw()
+            # the input dialog         
+            guess = simpledialog.askstring(title="Input Box",prompt="Enter five character:")
+            theGuess=self.verifyGuess(guess)
+            #guess = input("Enter five character:")
+            print("You have guess",theGuess)
+            num_of_guesses += 1
+            #process guess
+            guessed_correctly = self.processGuess(answer, theGuess)      
+        return guessed_correctly,num_of_guesses
+
+<<<<<<< Updated upstream
 def logicCode():
     p=os.path.getsize("demo.txt")
     if(p==0):
@@ -126,6 +183,11 @@ def logicCode():
         #process guess
         guessed_correctly = processGuess(answer, theGuess)      
     return guessed_correctly,num_of_guesses
+=======
+    def __str__ (self):
+        return 'Game Ended ! Good Bye !'
+>>>>>>> Stashed changes
 #main Function of Program
 if __name__=='__main__':
-    main()  
+    game=WordleGame()
+    print(game.__str__())
