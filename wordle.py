@@ -22,39 +22,12 @@ class WordleGame():
         if guessed_correctly:
             print("Congratulations You have guesses Correct Word:-",guessed_correctly)
         else:
-<<<<<<< Updated upstream
-            print("Goodbye")
-
-def word_fetch():
-    try:
-        a = open("demo.txt", "w")
-        f = open("words.txt", "r")
-        for x in f:
-            if(len(x)==6):
-                a.write(x)
-    except IOError:
-        print("File not accessible")
-    a.close()
-
-def processGuess(theAnswer, theGuess):
-    position=0
-    clue=""
-    distribution=0
-    for letter in theGuess:
-        if letter == theAnswer[position]:
-            clue += "G" #G represents True Letter on Complete position
-            distribution+=20
-        elif letter in theAnswer:
-            clue += "Y" #Y represents True Letter on Different position
-            distribution+=10
-=======
             print("You have used guesses:-", num_of_guesses)
             print("Game Over Better luck Next Time...")
         total_game_played=1
         while True:        
             ROOT = tk.Tk()
             ROOT.withdraw()
-        
             playAgain=messagebox.askquestion("Confirm","Do You Want To Play Again?")  
             messagebox_info=["No of Game Played: "+str(total_game_played),"Your Staticals of Game","1st Attempt: "+str(staticals_list[0]),"2nd Attempt: "+str(staticals_list[1]),"3rd Attempt: "+str(staticals_list[2]),"4th Attempt: "+str(staticals_list[3]),"5th Attempt: "+str(staticals_list[4]),"6th Attempt: "+str(staticals_list[5])]
             staticals_list.pop(0)
@@ -115,7 +88,6 @@ def processGuess(theAnswer, theGuess):
     def verifyGuess(self,theGuess):
         if(len(theGuess) > 5 ):
             return theGuess[:5].strip()
->>>>>>> Stashed changes
         else:
             return theGuess
 
@@ -131,17 +103,21 @@ def processGuess(theAnswer, theGuess):
         wordList.close()
 
     def logicCode(self):
+        #words=[]
         p=os.path.getsize("demo.txt")
         if(p==0):
             self.word_fetch()
             
         wordList=open("demo.txt", "r+")
+        #for line in wordList:
+            #words.append(line.rstrip("\n"))    
         words = wordList.read().splitlines()
+        wordList.close()
         answer=random.choice(words)
         self.removeWord(answer)
         num_of_guesses=0
         guesses_correctly = False
-        wordList.close()
+       
         print("G=Letter is True, Y=True Letter In wrong Spot and _= Wrong Letter")
         while num_of_guesses < 6 and not guesses_correctly:
             #get input from user
@@ -157,37 +133,11 @@ def processGuess(theAnswer, theGuess):
             guessed_correctly = self.processGuess(answer, theGuess)      
         return guessed_correctly,num_of_guesses
 
-<<<<<<< Updated upstream
-def logicCode():
-    p=os.path.getsize("demo.txt")
-    if(p==0):
-        word_fetch()
-        
-    wordList=open("demo.txt", "r+")
-    words = wordList.read().splitlines()
-    answer=random.choice(words)
-    removeWord(answer)
-    num_of_guesses=0
-    guesses_correctly = False
-    print("G=Letter is True, Y=True Letter In wrong Spot and _= Wrong Letter")
-    while num_of_guesses < 6 and not guesses_correctly:
-        #get input from user
-        ROOT = tk.Tk()
-        ROOT.withdraw()
-        # the input dialog         
-        guess = simpledialog.askstring(title="Input Box",prompt="Enter five character:")
-        theGuess=verifyGuess(guess)
-        #guess = input("Enter five character:")
-        print("You have guess",theGuess)
-        num_of_guesses += 1
-        #process guess
-        guessed_correctly = processGuess(answer, theGuess)      
-    return guessed_correctly,num_of_guesses
-=======
     def __str__ (self):
-        return 'Game Ended ! Good Bye !'
->>>>>>> Stashed changes
+        return 'Good Bye! You have Quit Game.'
+    
 #main Function of Program
 if __name__=='__main__':
     game=WordleGame()
     print(game.__str__())
+    
