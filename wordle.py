@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import simpledialog
 from tkinter import messagebox
 import logging
+import re
+import collections
 from datetime import datetime
 
 logging.basicConfig(filename='GamePlay.log', filemode='a', format='%(name)s - %(levelname)s - %(message)s')
@@ -62,12 +64,15 @@ class WordleGame():
         a.close()
         f.close()
 
+
     def processGuess(self,theAnswer, theGuess):
         position=0
         clue=""
+        hint=""
         distribution=0
         for letter in theGuess:
             if letter == theAnswer[position]:
+                hint += letter
                 clue += "G" #G represents True Letter on Complete position
                 distribution+=20
             elif letter in theAnswer:
@@ -76,6 +81,7 @@ class WordleGame():
             else:
                 clue += "_" #_ represents False Letter 
             position += 1
+        self.find_similar_words(hint)
         print(clue)
         staticals_list.append(distribution)
         print(staticals_list)
@@ -91,6 +97,25 @@ class WordleGame():
         else:
             return theGuess
 
+    def find_similar_words(self,hint):
+        linked_list = collections.deque()
+        line_count=0
+        if(hint!=""):
+            wordList=open("demo.txt", "r+")
+            lines = wordList.read().splitlines()
+            for line in lines:
+                if hint in line:
+                    linked_list.append(line)
+            print(linked_list)
+        else:
+            wordList=open("demo.txt", "r+")
+            for i in range(50):
+                line = wordList.read().splitlines()
+                linked_list.append(line)
+            print(linked_list)
+            
+            
+    
     def removeWord(self,answer):
         #Code for removing word which is already selected To avoid repeated word in Gameplay.
         wordList=open("demo.txt", "r+")
