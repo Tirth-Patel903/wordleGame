@@ -69,10 +69,12 @@ class WordleGame():
         position=0
         clue=""
         hint=""
+        pos=""
         distribution=0
         for letter in theGuess:
             if letter == theAnswer[position]:
-                hint += letter
+                hint += letter + ''
+                pos=str(position) +','
                 clue += "G" #G represents True Letter on Complete position
                 distribution+=20
             elif letter in theAnswer:
@@ -81,10 +83,10 @@ class WordleGame():
             else:
                 clue += "_" #_ represents False Letter 
             position += 1
-        self.find_similar_words(hint)
-        print(clue)
+        self.find_similar_words(hint,clue,pos,theAnswer)
         staticals_list.append(distribution)
         print(staticals_list)
+        print(clue)
         logger.info('Your clue:-'+ clue)
         logger.info('Answer:-'+ theAnswer)
         logger.info('Your Guess:-'+ theGuess)
@@ -97,15 +99,25 @@ class WordleGame():
         else:
             return theGuess
 
-    def find_similar_words(self,hint):
+    def find_similar_words(self,hint,clue,pos,theAnswer):
+        array_hintt=[]
+        array_hint=hint.split()
+        array_pos=pos.split(",")
+        for i in hint:
+            array_hintt.append(i)
         linked_list = collections.deque()
         line_count=0
         if(hint!=""):
+            print(len(hint))
             wordList=open("demo.txt", "r+")
             lines = wordList.read().splitlines()
             for line in lines:
-                if hint in line:
-                    linked_list.append(line)
+                for i in array_pos:
+                    if (line[0] == theAnswer[0]) and (line[4] == theAnswer[4]):
+                        linked_list.append(line)
+                    elif(hint in line):
+                        linked_list.append(line)
+                        
             print(linked_list)
         else:
             wordList=open("demo.txt", "r+")
@@ -127,19 +139,24 @@ class WordleGame():
             
         wordList.close()
 
+    def giveHint(self,answer):
+        first_letter=answer[0]
+        last_letter=answer[4]
+        print('First Letter is :-'+first_letter)
+        print('Last Letter is :-' +last_letter)
+        
     def logicCode(self):
         #words=[]
         p=os.path.getsize("demo.txt")
         if(p==0):
             self.word_fetch()
             
-        wordList=open("demo.txt", "r+")
-        #for line in wordList:
-            #words.append(line.rstrip("\n"))    
+        wordList=open("demo.txt", "r+")  
         words = wordList.read().splitlines()
         wordList.close()
         answer=random.choice(words)
-        self.removeWord(answer)
+        self.giveHint(answer)
+        #self.removeWord(answer)
         num_of_guesses=0
         guesses_correctly = False
        
